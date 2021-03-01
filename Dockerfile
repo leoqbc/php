@@ -20,7 +20,8 @@ RUN apk add --no-cache \
 		tar \
 		xz \
 # https://github.com/docker-library/php/issues/494
-		openssl
+		openssl \
+		icu-dev
 
 # ensure www-data user exists
 RUN set -eux; \
@@ -111,6 +112,7 @@ RUN set -eux; \
 		--with-config-file-path="$PHP_INI_DIR" \
 		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
 		\
+		--enable-intl \
 # make sure invalid --configure-flags are fatal errors instead of just warnings
 		--enable-option-checking=fatal \
 		\
@@ -187,8 +189,6 @@ RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install bcmath
 
 RUN docker-php-ext-install exif
-
-RUN php -r "copy('https://getcomposer.org/download/1.10.8/composer.phar', 'composer.phar');"
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 
