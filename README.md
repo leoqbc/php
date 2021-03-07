@@ -15,46 +15,46 @@ PHP 8.0.0 official source cli from php.net
 **php8.0.3-cli**
 
 ### Modules List
-[PHP Modules]
-bcmath
-Core
-ctype
-curl
-date
-dom
-exif
-fileinfo
-filter
-ftp
-hash
-iconv
-intl
-json
-libxml
-mbstring
-mysqlnd
-openssl
-pcre
-PDO
-pdo_mysql
-pdo_sqlite
-Phar
-posix
-readline
-Reflection
-session
-SimpleXML
-sodium
-SPL
-sqlite3
-standard
-tokenizer
-xml
-xmlreader
-xmlwriter
-Zend OPcache
-zlib
+#### [PHP Modules]
+- bcmath
+- Core
+- ctype
+- curl
+- date
+- dom
+- exif
+- fileinfo
+- filter
+- ftp
+- hash
+- iconv
+- intl
+- json
+- libxml
+- mbstring
+- mysqlnd
+- openssl
+- pcre
+- PDO
+- pdo_mysql
+- pdo_sqlite
+- Phar
+- posix
+- readline
+- Reflection
+- session
+- SimpleXML
+- sodium
+- SPL
+- sqlite3
+- standard
+- tokenizer
+- xml
+- xmlreader
+- xmlwriter
+- Zend OPcache
+- zlib
 
-[Zend Modules]
-Zend OPcache
+#### [Zend Modules]
+- Zend OPcache
 
