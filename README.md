@@ -14,6 +14,8 @@ PHP 8.0.0 official source cli from php.net
 
 **php8.0.3-cli**
 
+**php8.0.3-swoole** - add ext sockets and swoole ext
+
 ### Modules List
 #### [PHP Modules]
 - bcmath

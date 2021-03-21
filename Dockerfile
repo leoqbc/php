@@ -113,6 +113,8 @@ RUN set -eux; \
 		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
 		\
 		--enable-intl \
+
+		--enable-sockets \
 # make sure invalid --configure-flags are fatal errors instead of just warnings
 		--enable-option-checking=fatal \
 		\
@@ -162,7 +164,12 @@ RUN set -eux; \
 	cd /; \
 	docker-php-source delete; \
 	\
-	runDeps="$( \
+	# smoke test
+	php --version
+
+RUN printf "yes\nyes\nyes\nyes\nyes\nyes\n" | pecl install swoole
+
+RUN runDeps="$( \
 		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
 			| tr ',' '\n' \
 			| sort -u \
@@ -170,10 +177,8 @@ RUN set -eux; \
 	)"; \
 	apk add --no-cache $runDeps; \
 	\
-	apk del --no-network .build-deps; \
-	\
-# smoke test
-	php --version
+
+	apk del --no-network .build-deps;
 
 ADD php.ini /usr/local/etc/php/php.ini
 
@@ -189,6 +194,8 @@ RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install bcmath
 
 RUN docker-php-ext-install exif
+
+RUN docker-php-ext-enable swoole
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 
