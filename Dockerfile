@@ -169,33 +169,13 @@ RUN set -eux; \
 
 RUN printf "yes\nyes\nyes\nyes\nyes\nyes\n" | pecl install swoole
 
-RUN runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)"; \
-	apk add --no-cache $runDeps; \
-	\
-
-	apk del --no-network .build-deps;
-
 ADD php.ini /usr/local/etc/php/php.ini
 
 COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
 
-# sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
-RUN docker-php-ext-enable sodium
+RUN docker-php-ext-install pdo_mysql bcmath exif
 
-RUN docker-php-ext-enable opcache
-
-RUN docker-php-ext-install pdo_mysql
-
-RUN docker-php-ext-install bcmath
-
-RUN docker-php-ext-install exif
-
-RUN docker-php-ext-enable swoole
+RUN docker-php-ext-enable sodium opcache swoole
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 
@@ -206,6 +186,23 @@ RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 
 RUN chown www-data: composer.phar && mv composer.phar /usr/local/bin/composer
+
+# PHP8 gRPC support
+RUN pecl install grpc-1.36.0 protobuf-3.15.6
+
+RUN docker-php-ext-enable grpc protobuf
+
+# Clear the image
+RUN runDeps="$( \
+		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+			| tr ',' '\n' \
+			| sort -u \
+			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+	)"; \
+	apk add --no-cache $runDeps; \
+	\
+
+	apk del --no-network .build-deps;
 
 ENTRYPOINT ["docker-php-entrypoint"]
 

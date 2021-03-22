@@ -16,6 +16,8 @@ PHP 8.0.0 official source cli from php.net
 
 **php8.0.3-swoole** - add ext sockets and swoole ext
 
+**php8.0.3-grpc** - A gRPC ext installs (protobuf and gRPC)
+
 ### Modules List
 #### [PHP Modules]
 - bcmath
@@ -28,6 +30,7 @@ PHP 8.0.0 official source cli from php.net
 - fileinfo
 - filter
 - ftp
+- grpc
 - hash
 - iconv
 - intl
@@ -42,14 +45,17 @@ PHP 8.0.0 official source cli from php.net
 - pdo_sqlite
 - Phar
 - posix
+- protobuf
 - readline
 - Reflection
 - session
 - SimpleXML
+- sockets
 - sodium
 - SPL
 - sqlite3
 - standard
+- swoole
 - tokenizer
 - xml
 - xmlreader
