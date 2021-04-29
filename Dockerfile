@@ -53,8 +53,8 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 
 ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 BFDDD28642824F8118EF77909B67A5C12229118F
 
-ENV PHP_VERSION 8.0.3
-ENV PHP_URL="https://www.php.net/distributions/php-8.0.3.tar.xz" PHP_ASC_URL="https://www.php.net/distributions/php-8.0.3.tar.xz.asc"
+ENV PHP_VERSION 8.0.5
+ENV PHP_URL="https://www.php.net/distributions/php-8.0.5.tar.xz" PHP_ASC_URL="https://www.php.net/distributions/php-8.0.5.tar.xz.asc"
 ENV PHP_SHA256="c9816aa9745a9695672951eaff3a35ca5eddcb9cacf87a4f04b9fb1169010251"
 
 RUN set -eux; \
@@ -167,8 +167,6 @@ RUN set -eux; \
 	# smoke test
 	php --version
 
-RUN printf "yes\nyes\nyes\nyes\nyes\nyes\n" | pecl install swoole
-
 RUN runDeps="$( \
 		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
 			| tr ',' '\n' \
@@ -194,8 +192,6 @@ RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install bcmath
 
 RUN docker-php-ext-install exif
-
-RUN docker-php-ext-enable swoole
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 
