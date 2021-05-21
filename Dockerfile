@@ -181,8 +181,9 @@ ADD php.ini /usr/local/etc/php/php.ini
 COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
 
 RUN docker-php-ext-enable sodium \
-	docker-php-ext-enable opcache \
-	docker-php-ext-install pdo_mysql \
+	docker-php-ext-enable opcache
+	
+RUN docker-php-ext-install pdo_mysql \
 	docker-php-ext-install bcmath \
 	docker-php-ext-install exif
 
