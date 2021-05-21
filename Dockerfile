@@ -53,9 +53,9 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 
 ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 BFDDD28642824F8118EF77909B67A5C12229118F
 
-ENV PHP_VERSION 8.0.5
-ENV PHP_URL="https://www.php.net/distributions/php-8.0.5.tar.xz" PHP_ASC_URL="https://www.php.net/distributions/php-8.0.5.tar.xz.asc"
-ENV PHP_SHA256="5dd358b35ecd5890a4f09fb68035a72fe6b45d3ead6999ea95981a107fd1f2ab"
+ENV PHP_VERSION 8.0.6
+ENV PHP_URL="https://www.php.net/distributions/php-8.0.6.tar.xz" PHP_ASC_URL="https://www.php.net/distributions/php-8.0.6.tar.xz.asc"
+ENV PHP_SHA256="e9871d3b6c391fe9e89f86f6334852dcc10eeaaa8d5565beb8436e7f0cf30e20"
 
 RUN set -eux; \
 	\
@@ -113,7 +113,6 @@ RUN set -eux; \
 		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
 		\
 		--enable-intl \
-
 		--enable-sockets \
 # make sure invalid --configure-flags are fatal errors instead of just warnings
 		--enable-option-checking=fatal \
@@ -144,8 +143,8 @@ RUN set -eux; \
 		--with-zlib \
 		\
 # in PHP 7.4+, the pecl/pear installers are officially deprecated (requiring an explicit "--with-pear")
-		--with-pear \
-		\
+#	--with-pear \
+#		\
 # bundled pcre does not support JIT on s390x
 # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
 		$(test "$gnuArch" = 's390x-linux-musl' && echo '--without-pcre-jit') \
@@ -175,23 +174,17 @@ RUN runDeps="$( \
 	)"; \
 	apk add --no-cache $runDeps; \
 	\
-
 	apk del --no-network .build-deps;
 
 ADD php.ini /usr/local/etc/php/php.ini
 
 COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
 
-# sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
-RUN docker-php-ext-enable sodium
-
-RUN docker-php-ext-enable opcache
-
-RUN docker-php-ext-install pdo_mysql
-
-RUN docker-php-ext-install bcmath
-
-RUN docker-php-ext-install exif
+RUN docker-php-ext-enable sodium \
+	docker-php-ext-enable opcache \
+	docker-php-ext-install pdo_mysql \
+	docker-php-ext-install bcmath \
+	docker-php-ext-install exif
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 
